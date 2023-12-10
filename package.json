@@ -1,0 +1,17 @@
+{
+  "name": "aocli",
+  "version": "1.0.0",
+  "description": "An Advent of Code CLI",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "aocli": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "inquirer": "^9.2.12",
+    "node-fetch": "^3.3.2"
+  }
+}
