@@ -185,6 +185,8 @@ const changePart = () => {
 };
 
 const submitAnswer = async (day, answer) => {
+  if (child) child.kill();
+
   if (!answer) {
     console.log("\nNo result to submit");
     return;
@@ -236,6 +238,15 @@ const submitAnswer = async (day, answer) => {
   return false;
 };
 
+const stopExecution = () => {
+  if (child.connected) {
+    child.kill();
+    console.log("Stopped running function execution");
+  } else {
+    console.log("No currently running function execution");
+  }
+};
+
 let day = await getDay();
 setupFolders(day);
 getInput(day);
@@ -255,14 +266,12 @@ stdin.on("data", function (key) {
     watchFile(day);
   }
   if (key === "x" || key === "X") {
-    console.log("Stopped running function execution");
-    if (child) child.kill();
+    stopExecution();
   }
   if (key === "f" || key === "F") {
     getInput(day, true);
   }
   if (key === "s" || key === "S") {
-    if (child) child.kill();
     submitAnswer(day, result);
   }
   if (key === "p" || key === "P") {
