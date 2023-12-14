@@ -2,9 +2,7 @@ import inquirer from "inquirer";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import fs from "fs";
-import readline from "readline";
 import { fork } from "child_process";
-import { get } from "https";
 dotenv.config();
 
 let stdin = process.stdin;
@@ -165,7 +163,15 @@ const runDay = async (day) => {
   });
 };
 
-const submitAnswer = async (day, part, answer) => {
+const changePart = () => {
+  if (++part === 3) part = 1;
+  console.log("\nSwitched to part", part);
+  if (child) child.kill();
+  if (isWatching) watchFile(day);
+  result = undefined;
+};
+
+const submitAnswer = async (day, answer) => {
   if (!answer) {
     console.log("\nNo result to submit");
     return;
@@ -196,7 +202,7 @@ const submitAnswer = async (day, part, answer) => {
 
   let html = await res.text();
 
-  let response = html.match(/<article>(.*)<\/article>/)[1];
+  let response = html.match(/<article>([\s\S]*?)<\/article>/)[1];
 
   response = response.replace(/(<([^>]+)>)/gi, "");
 
@@ -204,6 +210,11 @@ const submitAnswer = async (day, part, answer) => {
 
   if (response.includes("right answer!")) {
     attempted[`part${part}`].push(answer);
+
+    if (part == 1) {
+      changePart();
+    }
+
     return true;
   }
   if (response.includes("not the right answer")) {
@@ -238,12 +249,9 @@ stdin.on("data", function (key) {
   }
   if (key === "s" || key === "S") {
     if (child) child.kill();
-    submitAnswer(day, part, result);
+    submitAnswer(day, result);
   }
   if (key === "p" || key === "P") {
-    if (++part === 3) part = 1;
-    console.log("\nSwitched to part", part);
-    if (child) child.kill();
-    if (isWatching) watchFile(day);
+    changePart();
   }
 });
