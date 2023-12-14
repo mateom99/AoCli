@@ -47,6 +47,8 @@ let watchers = [];
 const watchFile = (day) => {
   const destinationDir = `${process.cwd()}/src/${year}/day${day}/part${part}.js`;
   const parseDestinationDir = `${process.cwd()}/src/${year}/day${day}/parse.js`;
+  const inputDesinationDir = `${process.cwd()}/src/${year}/day${day}/input.txt`;
+
   if (!isWatching) {
     console.log("Watching for file changes...");
 
@@ -74,6 +76,18 @@ const watchFile = (day) => {
         }
       })
     );
+    watchers.push(
+      fs.watch(inputDesinationDir, (event, filename) => {
+        if (filename) {
+          if (fsWait) return;
+          fsWait = setTimeout(() => {
+            fsWait = false;
+          }, 100);
+          runDay(day);
+          // console.log(`${filename} file Changed`);
+        }
+      })
+    );
     isWatching = true;
   } else {
     console.log("Stopped watching for file changes");
@@ -89,8 +103,6 @@ const getInput = async (day, force = false) => {
   ) {
     return;
   }
-
-  fs.writeFileSync(`${process.cwd()}/src/${year}/day${day}/input.txt`, "");
 
   fetch(`https://adventofcode.com/${year}/day/${parseInt(day, 10)}/input`, {
     headers: {
@@ -138,6 +150,7 @@ const setupFolders = (day) => {
 let result;
 let child = fork("childProcess.js");
 const runDay = async (day) => {
+  result = undefined;
   if (child) {
     // console.log("Killing child process");
     child.kill();
@@ -242,6 +255,7 @@ stdin.on("data", function (key) {
     watchFile(day);
   }
   if (key === "x" || key === "X") {
+    console.log("Stopped running function execution");
     if (child) child.kill();
   }
   if (key === "f" || key === "F") {
