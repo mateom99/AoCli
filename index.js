@@ -1,4 +1,3 @@
-import inquirer from "inquirer";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import fs from "fs";
@@ -23,22 +22,10 @@ const getDay = async () => {
     return parseInt(process.argv[2], 10) < 10
       ? "0" + process.argv[2]
       : process.argv[2];
-  const currentDate = new Date();
-  const currentDay = currentDate.getDate();
-  const dayOptions = Array.from({ length: currentDay + 1 }, (_, i) =>
-    (i + 1).toString()
-  );
-  let res = await inquirer.prompt([
-    {
-      type: "list",
-      name: "selectedDay",
-      message: "Select a day:",
-      choices: dayOptions,
-    },
-  ]);
 
-  day = res.selectedDay;
-  day = parseInt(day, 10);
+  console.error("No day specified, please specify a day as the first argument");
+  if (child) child.kill();
+  process.exit(1);
 };
 
 let fsWait = false;
