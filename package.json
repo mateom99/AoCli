@@ -5,9 +5,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "aocli": "node index.js"
+    "aocli": "node --max-old-space-size=16384 --stack-size=1000000 index.js"
   },
-  "author": "",
+  "author": "MLabs Ltd",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",

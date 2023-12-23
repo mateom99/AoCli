@@ -174,6 +174,12 @@ const runDay = async (day) => {
       child.disconnect(); // Disconnect if the task is done
     }
   });
+
+  child.on("exit", (code, signal) => {
+    if (signal === "SIGSEGV") {
+      console.error("Execution failed due to a segmentation fault");
+    }
+  });
 };
 
 const changePart = () => {
