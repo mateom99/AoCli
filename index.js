@@ -144,6 +144,8 @@ const runDay = async (day) => {
     child = fork("childProcess.js");
   }
 
+  console.log("\nRunning...");
+
   child.on("message", (msg) => {
     if (msg.status === "ready") {
       // Now that the child is ready, send the message
