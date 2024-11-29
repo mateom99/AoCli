@@ -9,7 +9,7 @@ stdin.setRawMode(true);
 stdin.resume();
 stdin.setEncoding("utf8");
 
-const year = 2023;
+const year = 2024;
 let part = 1;
 
 let attempted = {
