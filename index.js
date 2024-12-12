@@ -105,6 +105,7 @@ const getInput = async (day, force = false) => {
       }
       const destinationDir = `${process.cwd()}/src/${year}/day${day}`;
       fs.writeFileSync(`${destinationDir}/input.txt`, input);
+      console.log("\nSuccesfully fetched input");
     });
 };
 
